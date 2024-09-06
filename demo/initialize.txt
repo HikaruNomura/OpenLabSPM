@@ -1,0 +1,44 @@
+# Set loop time for the FPGA
+# If the value is set to 350, the FPGA will run at intervals of 350/40 MHz = 8.75 micro second, 
+# since the FPGA clock is 40 MHz. That is, analog I/O is processed every 8.75 microseconds.
+{"cmd":"set_loop_timer","args":{"val":350}}
+
+# Set AO gain (/V). When the gain is 10 and value is 5, then the output voltage becomes 5/10 = 0.5V.
+{"cmd":"set_ao_gain","args":{"gain":[1,1,1,1,1,1,1,1]}}
+
+# Set AI gain (/V). When the gain is 10 and AI voltage is 5V then the measured value becomes 5*10=50.
+{"cmd":"set_ai_gain","args":{"gain":[1,1,1,1,1,1,1,1]}}
+
+# Set the output voltage limit. In this example, X-Y-Z channels are limited from 0 V to 10 V. 
+# Other channel can be used with full range.
+{"cmd":"set_ao_range","args":{
+    "low" :[0,0,0,-10,-10,-10,-10,-10],
+    "high":[10,10,10,10,10,10,10,10]}}
+
+# Set the output speed.
+# Sets the maximum amount of change in the analog output that is allowed in a time interval set by set_loop_timer.
+{"cmd":"set_speed","args":{"speed":[1e-3,1e-3,1e-3,1e-3,1e-3,1e-3,1e-3,1e-3]}}
+
+# Set the threshold for auto reversal
+{"cmd":"set_threshold","args":{"ai_low":[-Infinity,-Infinity,-Infinity,-Infinity,-Infinity,-Infinity,-Infinity,-Infinity], "fb_low":[-Infinity,-Infinity], "ai_high":[Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity], "fb_high":[Infinity,Infinity]}}
+
+# Set the threshold for tip guard
+# In this example, when AI0 is less than 5, the AO2 becomes 0.
+{"cmd":"set_tip_guard", "args":{"tg_position":0, "ai_low":[-Infinity,-Infinity,-Infinity,-Infinity,-Infinity,-Infinity,-Infinity,-Infinity], "fb_low":[-Infinity,-Infinity], "ai_high":[Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity], "fb_high":[Infinity,Infinity]}}
+
+# Set default feedback parameters
+{"cmd":"set_feedback","args":{"fb channel":0, "fb config":{"Setpoint":1, "Output limit (low)":-5, "Output limit (high)":10, "P gain":1e-3, "I gain":1e-3, "Reset":true, "Hold":false, "Negative":true, "Input channel":0, "Output channel":2, "wait for fb":0, "Error limit (high)":0.1, "Error limit (low)":-0.1}}}
+
+# Open forms
+{"cmd":"open_form","args":{"name":"monitor"},"fargs":{"ch":0}}
+{"cmd":"open_form","args":{"name":"monitor"},"fargs":{"ch":1}}
+{"cmd":"open_form","args":{"name":"send_command"}}
+{"cmd":"open_form","args":{"name":"live_viewer_2D"},"fargs":{"ch":1}}
+{"cmd":"open_form","args":{"name":"live_viewer_1D"},"fargs":{"ch":16}}
+{"cmd":"open_form","args":{"name":"feedback"}}
+{"cmd":"open_form","args":{"name":"xyz_monitor"}}
+{"cmd":"move","args":{"ch":2,"val":5}}
+
+{"cmd":"start_server","args":{"port":8070}}
+
+

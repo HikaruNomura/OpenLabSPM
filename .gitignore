@@ -10,8 +10,17 @@
 
 # Executables
 *.exe
+FPGA Bitfiles/
 
 # Metadata
 *.aliases
 *.lvlps
 .cache/
+.ipynb_checkpoints
+
+python/__pycache__
+
+# Demo results
+demo/*.dat
+demo/log.txt
+demo/log_ts.txt
